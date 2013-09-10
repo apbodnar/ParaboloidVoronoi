@@ -32,13 +32,15 @@
 	uniform float tick;
 	uniform int count;
 	
+	//eye-ballin' it
 	float parabolZ(vec2 p){
-		return (p.x*p.x+p.y*p.y)/2.0;
+		return (p.x*p.x+p.y*p.y)/8.0;
 	}
 	
 	vec3 gradient(vec2 p){
 		float r = sqrt(parabolZ(p));
-		return vec3(2.0*p.x,2.0*p.y,1.0/parabolZ(p))/2.0;
+		//return vec3(2.0*p.x,2.0*p.y,1.0/parabolZ(p))/3.0;
+		return vec3(2.0*p.x,2.0*p.y,1.0/(2.0*r))/8.0;
 	}
 	
 	float getAngleX(vec3 a){
@@ -53,6 +55,10 @@
 		return atan(length(cross(a1,b1)),a.z);
 	}
 	
+	float rand(vec2 co){
+		return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+	}
+	
 	mat4 rX(float a) {
 		float c = cos(a);
 		float s = sin(a);
@@ -60,10 +66,6 @@
 					0.0,	c,		-s,		0.0,
 					0.0,	s,		c,		0.0,
 					0.0,	0.0,	0.0,	1.0);
-	}
-	
-	float rand(vec2 co){
-		return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 	}
 	
 	mat4 rY(float a) {
