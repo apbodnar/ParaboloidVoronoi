@@ -94,18 +94,11 @@
 		color = grad;
 		float ax = getAngleX(grad);
 		float ay = getAngleY(grad);
-<<<<<<< HEAD
 		mat4 r = rX(ay*sign(rTrans.y));
 		r *= rY(ax*sign(rTrans.x));
 		vec4 vTrans = vec4(rTrans.xy,-parabolZ(rTrans.xy),0);//* rZ(tick/100.0);
         gl_Position = vec4((vec4(40.0/sqrt(float(count))*aVertexPosition, 0.0) * r + vTrans).xyz,1.0);
-=======
-		mat4 r = rX(ay*sign(aVertexTrans.y));
-		r *= rY(ax*sign(aVertexTrans.x));
-		vec4 vTrans = vec4(aVertexTrans.xy,-parabolZ(aVertexTrans.xy),0);
-        gl_Position = vec4((vec4(30.0/sqrt(float(count))*aVertexPosition, 0.0) * r + vTrans).xyz,1.0);
-		//gl_Position = vec4((vec4(0.01*aVertexPosition, 0.0) + vTrans).xyz,1.0);
->>>>>>> merge
+
     }
 </script>
 
