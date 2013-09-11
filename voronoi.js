@@ -70,6 +70,27 @@ var gl;
 		
 		shaderProgram.tickUniform = gl.getUniformLocation(shaderProgram, "tick");
 		shaderProgram.countUniform = gl.getUniformLocation(shaderProgram, "count");
+		shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
+    }
+	
+	    function handleLoadedTexture(texture) {
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+
+    var vTexture;
+    function initTexture() {
+        vTexture = gl.createTexture();
+        vTexture.image = new Image();
+        vTexture.image.onload = function () {
+            handleLoadedTexture(vTexture)
+        }
+
+        vTexture.image.src = "flower.bmp";
     }
 
     var squareVertexPositionBuffer;
@@ -136,6 +157,7 @@ var gl;
         initGL(canvas);
         initShaders();
         initBuffers();
+		initTexture();
 
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
