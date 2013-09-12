@@ -9,7 +9,7 @@
 <script type="text/javascript" src="webgl-utils.js"></script>
 
 <script id="shader-fs" type="x-shader/x-fragment">
-    precision mediump float;
+    precision highp float;
 	
 	uniform float tick;  
 	
@@ -23,7 +23,8 @@
 </script>
 
 <script id="shader-vs" type="x-shader/x-vertex">
-    attribute vec3 aVertexPosition;
+    precision highp float;
+	attribute vec3 aVertexPosition;
 	attribute vec4 aVertexTrans;
 	
 	varying vec3 color;
@@ -34,25 +35,26 @@
 	float zscale = 1.0;
 	//eye-ballin' it
 	float parabolZ(vec2 p){
-		return (p.x*p.x+p.y*p.y)/zscale;
+		return ((p.x*p.x)+(p.y*p.y))/zscale;
 	}
 	
 	vec3 gradient(vec2 p){
-		float r = sqrt(parabolZ(p));
 		//return vec3(2.0*p.x,2.0*p.y,1.0/parabolZ(p))/3.0;
-		return vec3(2.0*p.x,2.0*p.y,1)/zscale;
+		return vec3(2.0*p.x,2.0*p.y,1.0)/zscale;
 	}
 	
 	float getAngleX(vec3 a){
 		vec3 a1 = vec3(a.x,0.0,a.z);
 		vec3 b1 = vec3(0.0,0.0,1.0);
-		return atan(length(cross(a1,b1)),a.z);
+		//return atan(length(cross(a1,b1)),a.z);
+		return acos(dot(a1,b1)/length(a1));
 	}
 	
 	float getAngleY(vec3 a){
-		vec3 a1 = vec3(0.0,a.yz);
+		vec3 a1 = vec3(0.0,a.y,a.z);
 		vec3 b1 = vec3(0.0,0.0,1.0);
-		return atan(length(cross(a1,b1)),a.z);
+		//return atan(length(cross(a1,b1)),a.z);
+		return acos(dot(a1,b1)/length(a1));
 	}
 	
 	float rand(vec2 co){
@@ -89,15 +91,17 @@
     void main(void) {
 		float PI = 3.14159265358979323846264;
 		rc = (vec4(rand(aVertexTrans.xy),rand(aVertexTrans.xy+1.0),rand(aVertexTrans.xy-1.0),1));
-		vec4 rTrans = aVertexTrans * rZ(sin(1600.0*length(aVertexTrans))*tick/200.0);
+		vec4 rTrans = aVertexTrans * rZ(sin(1600.0*length(aVertexTrans))*tick/16000.0);
 		vec3 grad = -normalize(gradient(rTrans.xy));
+		color = grad;
 		float ax = getAngleX(grad);
 		float ay = getAngleY(grad);
 		mat4 r = rX(ay*sign(rTrans.y));
 		r *= rY(ax*sign(rTrans.x));
+		//mat4 r = -rY(ax*sign(rTrans.x));
+		//r *= rX(ay*sign(rTrans.y));
 		vec4 vTrans = vec4(rTrans.xy,-parabolZ(rTrans.xy),0);//* rZ(tick/100.0);
-        gl_Position = vec4((vec4(40.0/sqrt(float(count))*aVertexPosition, 0.0) * r + vTrans).xyz,1.0);
-
+        gl_Position = vec4((vec4(20.0/sqrt(float(count))*aVertexPosition, 0.0) * r + vTrans).xyz,1.0);
     }
 </script>
 

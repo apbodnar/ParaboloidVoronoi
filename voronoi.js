@@ -94,7 +94,7 @@ var gl;
     }
 
     var squareVertexPositionBuffer;
-	var num_triangles = 1000;
+	var num_triangles = 2000;
     function initBuffers() {
         squareVertexPositionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
@@ -128,6 +128,16 @@ var gl;
         squareVertexColorBuffer.numItems = 3*num_triangles*2;
     }
 
+	 var lastTime = 0;
+	 var elapsed = 0;
+
+    function animate() {
+        var timeNow = new Date().getTime();
+        if (lastTime != 0) {
+            elapsed += timeNow - lastTime;
+        }
+        lastTime = timeNow;
+    }
 	
 	var delta = 1.0;
 	
@@ -141,7 +151,7 @@ var gl;
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexColorBuffer);
 		gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, squareVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
 		
-		gl.uniform1f(shaderProgram.tickUniform, delta+=1.0);
+		gl.uniform1f(shaderProgram.tickUniform, elapsed/1.0);
 		gl.uniform1i(shaderProgram.countUniform, num_triangles);
         gl.drawArrays(gl.TRIANGLES, 0, squareVertexPositionBuffer.numItems);
     }
@@ -149,6 +159,7 @@ var gl;
 	function tick() {
 		requestAnimFrame(tick);
 		drawScene();
+		animate();
 	}
 
 
