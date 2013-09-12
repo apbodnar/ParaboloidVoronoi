@@ -151,7 +151,7 @@ var gl;
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexColorBuffer);
 		gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, squareVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
 		
-		gl.uniform1f(shaderProgram.tickUniform, elapsed/1.0);
+		gl.uniform1f(shaderProgram.tickUniform, delta+=1.0);
 		gl.uniform1i(shaderProgram.countUniform, num_triangles);
         gl.drawArrays(gl.TRIANGLES, 0, squareVertexPositionBuffer.numItems);
     }
