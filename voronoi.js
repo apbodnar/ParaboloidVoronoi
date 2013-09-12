@@ -94,7 +94,7 @@ var gl;
     }
 
     var squareVertexPositionBuffer;
-	var num_triangles = 2000;
+	var num_triangles;// = parseInt(document.getElementById('sites').value);
     function initBuffers() {
         squareVertexPositionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
@@ -151,7 +151,7 @@ var gl;
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexColorBuffer);
 		gl.vertexAttribPointer(shaderProgram.vertexColorAttribute, squareVertexColorBuffer.itemSize, gl.FLOAT, false, 0, 0);
 		
-		gl.uniform1f(shaderProgram.tickUniform, delta+=1.0);
+		gl.uniform1f(shaderProgram.tickUniform, elapsed/10.0);
 		gl.uniform1i(shaderProgram.countUniform, num_triangles);
         gl.drawArrays(gl.TRIANGLES, 0, squareVertexPositionBuffer.numItems);
     }
@@ -164,11 +164,12 @@ var gl;
 
 
     function webGLStart() {
+		num_triangles = parseInt(document.getElementById('sites').value);
         var canvas = document.getElementById("LICcanvas");
         initGL(canvas);
         initShaders();
         initBuffers();
-		initTexture();
+		//initTexture();
 
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);

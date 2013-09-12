@@ -73,7 +73,7 @@
 	}
 	
 	mat4 netR(vec3 t){
-		vec3 axis = -cross(t, vec3(0,0,1));
+		vec3 axis = cross(vec3(0,0,1),t);
 		float a = getAngle(t);
 		return rotationMatrix(axis, a);
 	}
@@ -81,7 +81,7 @@
     void main(void) {
 		float PI = 3.14159265358979323846264;
 		rc = (vec4(rand(aVertexTrans.xy),rand(aVertexTrans.xy+1.0),rand(aVertexTrans.xy-1.0),1));
-		vec4 rTrans = aVertexTrans * rZ(sin(16000.0*length(aVertexTrans))*tick/200.0);
+		vec4 rTrans = aVertexTrans * rZ(cos(2000.0*length(aVertexTrans))*tick/300.0/length(aVertexTrans)/length(aVertexTrans));
 		vec3 grad = (gradient(rTrans.xy));
 		mat4 r = netR(grad);
 		vec4 vTrans = vec4(rTrans.xy,-parabolZ(rTrans.xy),0);
@@ -93,8 +93,12 @@
 </head>
 
 
-<body onload="webGLStart();">
-    <canvas id="LICcanvas" style="border: none;" width="800" height="800"></canvas>
+<body>
+	<form>
+		Number of sites: <input type="text" id="sites" value="500">
+		<input type="button" value="Go!" onclick="webGLStart()">
+	</form>
+    <canvas id="LICcanvas" style="border: solid; color: black; border-width: 1px;" width="800" height="800"></canvas>
 </body>
 
 </html>
