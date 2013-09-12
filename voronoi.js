@@ -94,7 +94,7 @@ var gl;
     }
 
     var squareVertexPositionBuffer;
-	var num_triangles = 1000;
+	var num_triangles = 3000;
     function initBuffers() {
         squareVertexPositionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, squareVertexPositionBuffer);
