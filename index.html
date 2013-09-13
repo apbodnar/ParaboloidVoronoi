@@ -11,13 +11,15 @@
 <script id="shader-fs" type="x-shader/x-fragment">
     precision highp float;
 	
-	uniform float tick;  
+	uniform float tick; 
+	uniform sampler2D uSampler;	
 	
-	varying vec3 color;
+	varying vec4 tcoord;
 	varying vec4 rc;
 	
     void main(void) {
 		//gl_FragColor = vec4(abs(color),1);
+		//gl_FragColor = texture2D(uSampler, tcoord.xy);
 		gl_FragColor = rc;
     }
 </script>
@@ -27,7 +29,7 @@
 	attribute vec3 aVertexPosition;
 	attribute vec4 aVertexTrans;
 	
-	varying vec3 color;
+	varying vec4 tcoord;
 	varying vec4 rc;
 	
 	uniform float tick;
@@ -80,12 +82,14 @@
 	
     void main(void) {
 		float PI = 3.14159265358979323846264;
+		float L = length(aVertexTrans);
 		rc = (vec4(rand(aVertexTrans.xy),rand(aVertexTrans.xy+1.0),rand(aVertexTrans.xy-1.0),1));
-		vec4 rTrans = aVertexTrans * rZ(cos(2000.0*length(aVertexTrans))*tick/300.0/length(aVertexTrans)/length(aVertexTrans));
+		vec4 rTrans = aVertexTrans * rZ(cos(2000.0*L)*tick/300.0/L/L);
 		vec3 grad = (gradient(rTrans.xy));
 		mat4 r = netR(grad);
 		vec4 vTrans = vec4(rTrans.xy,-parabolZ(rTrans.xy),0);
-        gl_Position = vec4((vec4(10.0/sqrt(float(count))*aVertexPosition, 0.0) * r + vTrans).xyz,1.0);
+		tcoord = vTrans;
+        gl_Position = vec4((vec4(15.0/sqrt(float(count))*aVertexPosition, 0.0) * r + vTrans).xyz,1.0) + vec4(0,0,0.95,0);
     }
 </script>
 

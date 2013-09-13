@@ -73,7 +73,7 @@ var gl;
 		shaderProgram.samplerUniform = gl.getUniformLocation(shaderProgram, "uSampler");
     }
 	
-	    function handleLoadedTexture(texture) {
+	function handleLoadedTexture(texture) {
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
@@ -90,7 +90,7 @@ var gl;
             handleLoadedTexture(vTexture)
         }
 
-        vTexture.image.src = "flower.bmp";
+        vTexture.image.src = "flower.jpg";
     }
 
     var squareVertexPositionBuffer;
@@ -107,12 +107,23 @@ var gl;
 			-1.0,  -1.0, 0.0
         ];
 		
+		var vbo = new Float32Array(num_triangles*2*9);
+		for(var i=0; i<num_triangles; i++){
+			for(var j=0; j<18; j++){
+				vbo[i*18+j] = vertices[j];
+			}
+		}
+		gl.bufferData(gl.ARRAY_BUFFER, vbo, gl.STATIC_DRAW);
+		//*/
+		/*
 		var vbo = [];
 		for(var i=0; i<num_triangles; i++){
 			vbo = vbo.concat(vertices);
 		}
 		
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vbo), gl.STATIC_DRAW);
+		//*/
+		
         squareVertexPositionBuffer.itemSize = 3;
         squareVertexPositionBuffer.numItems = 3*num_triangles*2;
 
@@ -153,6 +164,7 @@ var gl;
 		
 		gl.uniform1f(shaderProgram.tickUniform, elapsed/10.0);
 		gl.uniform1i(shaderProgram.countUniform, num_triangles);
+		gl.uniform1i(shaderProgram.samplerUniform,0);
         gl.drawArrays(gl.TRIANGLES, 0, squareVertexPositionBuffer.numItems);
     }
 	
@@ -168,7 +180,7 @@ var gl;
         initGL(canvas);
         initShaders();
         initBuffers();
-		//initTexture();
+		initTexture();
 
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.DEPTH_TEST);
